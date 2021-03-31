@@ -32,12 +32,12 @@
         @endauth
     </nav>
 
-    <main class="container">
+    {{-- <main class="container">
         @yield('central')
-    </main>
+    </main> --}}
 
     <div id="app" data-app>
-        <example-component></example-component>
+        @yield('central')
     </div>
 
 
