@@ -22,7 +22,12 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="12" md="12">
-                      <v-text-field label="Titulo*" name="titulo" :id="item.title" required></v-text-field>
+                      <v-text-field
+                        label="Titulo*"
+                        name="titulo"
+                        :id="item.title"
+                        required
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="12" md="12">
                       <v-textarea
@@ -54,22 +59,43 @@
 <script>
 export default {
   data: () => ({
-    items: [{ title: "Proyecto",nombre:"proyectoArea" }, { title: "Lista",nombre:"listaArea" }],
+    items: [
+      { title: "Proyecto", nombre: "proyectoArea" },
+      { title: "Lista", nombre: "listaArea" },
+    ],
 
     dialog: false,
   }),
-  methods:{
-    btnCrear: function (){
-      // console.log("hola mundo");
+  methods: {
+    btnCrear: function () {
+      let laravelToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
 
-      console.log(document.getElementById("Lista").value);
-      console.log(document.getElementById("listaArea").value);
+      let init = {
+        method: "POST",
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+          "X-CSRF-TOKEN": laravelToken,
+        },
+        body: `titulo=${document.getElementById("Lista").value}&descripcion=${
+          document.getElementById("listaArea").value
+        }`,
+      };
 
+      fetch("/crear_proyecto", init)
+        // .then((response) => response.json())
+        .then(function (result) {
+          console.log(result);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
 
-      document.getElementById("Lista").value="";
-      document.getElementById("listaArea").value="";
+      document.getElementById("Lista").value = "";
+      document.getElementById("listaArea").value = "";
 
-      this.dialog=false;
+      this.dialog = false;
     },
   },
 };
