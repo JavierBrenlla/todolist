@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Proyecto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -65,6 +67,8 @@ Route::post('/crear_proyecto', function (Request $request) {
 
     if (isset($_POST['titulo']) and $_POST['titulo'] != "") {
 
+        /* Consulta crear proyecto */
+
         // Preparar consulta
 
         $smtp = $pdo->prepare("insert into proyectos (nombre, descripcion, fecha_creacion) values (:titulo,:descripcion,:fecha_creacion)");
@@ -78,6 +82,35 @@ Route::post('/crear_proyecto', function (Request $request) {
         // Ejecutar consulta
 
         $smtp->execute();
+
+        /* consulta para obtener id del ultimo proyecto */
+
+        $smtp = $pdo->prepare("SELECT id FROM `proyectos` ORDER by id desc limit 1");
+        $smtp->execute();
+
+        $id_proyecto = $smtp->fetch();
+
+        /* consulta crear registro en la tabla usuario_proyectos */
+
+        // creando consulta
+
+        $smtp = $pdo->prepare("INSERT INTO `usuario_proyectos`(`admin`, `user_id`, `proyecto_id`) VALUES (:admin,:user_id,:proyecto_id)");
+
+        // variables para bindear
+
+        $numero = 1;
+
+        // variable del id de usuario
+        $id = Auth::id();
+
+        $smtp->bindParam(":admin", $numero);
+        $smtp->bindParam(":user_id", $id);
+        $smtp->bindParam(":proyecto_id", $id_proyecto['id']);
+
+        // ejecutar consulta
+
+        $smtp->execute();
+
     }
 });
 

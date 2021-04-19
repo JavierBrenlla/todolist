@@ -1,4 +1,5 @@
 <template>
+<!-- template que genera el boton de nuevo y todas sus funcuionalidades -->
   <v-row justify="space-around" class="d-flex flex-row-reverse mt-2 mr-3">
     <v-menu transition="slide-y-transition" bottom>
       <template v-slot:activator="{ on, attrs }">
@@ -86,6 +87,8 @@ export default {
       fetch("/crear_proyecto", init)
         // .then((response) => response.json())
         .then(function (result) {
+          result.json();
+        }).then(result => {
           console.log(result);
         })
         .catch(function (error) {
