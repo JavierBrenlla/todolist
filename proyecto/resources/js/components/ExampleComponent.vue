@@ -1,20 +1,32 @@
 <template>
-<!-- template que genera el boton de nuevo y todas sus funcuionalidades -->
+  <!-- template que genera el boton de nuevo y todas sus funcuionalidades -->
   <v-row justify="space-around" class="d-flex flex-row-reverse mt-2 mr-3">
+    <!-- boton del menu desplegable, tiene una animacion de slide y -->
     <v-menu transition="slide-y-transition" bottom>
       <template v-slot:activator="{ on, attrs }">
         <v-btn class="purple" color="primary" dark v-bind="attrs" v-on="on">
           Nuevo
         </v-btn>
       </template>
+      <!-- lista de botones que se despliegan al pulsar en el boton NUEVO -->
+      <!-- los botones tienen un evento click de nombre selectBtn asociado, docho evento  recibe un parametro que hace referencia al index del array que se recorre para generar los botones-->
+      <!-- IMPORTANTE: el atributo :retain-focus evita que los botones se queden con el foco guardado una vez realizan el evento, esto causa el desbordamiento de la pila de llamadas de javascript -->
       <v-list>
         <v-list-item v-for="(item, i) in items" :key="i">
           <v-dialog v-model="dialog" max-width="600px" :retain-focus="false">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn block color="primary" dark v-bind="attrs" v-on="on">
+              <v-btn
+                block
+                color="primary"
+                dark
+                v-bind="attrs"
+                v-on="on"
+                @click="selectBtn(i)"
+              >
                 {{ item.title }}
               </v-btn>
             </template>
+            <!-- parte que crea el dialogo -->
             <v-card>
               <v-card-title>
                 <span class="headline">Crear</span>
@@ -42,6 +54,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
+                <!-- botones del dialogo, el boton de crear lanza el evento btnCrear -->
                 <v-btn color="blue darken-1" text @click="dialog = false">
                   Cerrar
                 </v-btn>
@@ -65,9 +78,29 @@ export default {
       { title: "Lista", nombre: "listaArea" },
     ],
 
+    // variable que controla la apertura y cierre del dialogo
     dialog: false,
+
+    // variable para controlar si se crea un proyecto o una tarea
+    opcion: 10,
   }),
   methods: {
+
+    // modifica la variable opcion en funcion del boton que pulse el usuario, como imput recibe el index del array que crea los botones (1 o 2) 
+    selectBtn: function (selector) {
+
+      // si selector es igual a 0 opcion pasa a valer 0
+      if (selector == 0) {
+        this.opcion = 0;
+        console.log(this.opcion);
+
+        // en caso contrario opcion vale 1
+      } else {
+        this.opcion = 1;
+        console.log(this.opcion);
+      }
+    },
+
     btnCrear: function () {
       let laravelToken = document
         .querySelector('meta[name="csrf-token"]')
@@ -84,16 +117,23 @@ export default {
         }`,
       };
 
-      fetch("/crear_proyecto", init)
-        // .then((response) => response.json())
-        .then(function (result) {
-          result.json();
-        }).then(result => {
-          console.log(result);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      if (this.opcion == 0) {
+        fetch("/crear_proyecto", init)
+          .then((result) => {
+            console.log(result);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }else{
+        fetch("/crear_tarea", init)
+          .then((result) => {
+            console.log(result);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
 
       document.getElementById("Lista").value = "";
       document.getElementById("listaArea").value = "";
