@@ -15,6 +15,7 @@ class CreateUsuarioListasTable extends Migration
     {
         Schema::create('usuario_listas', function (Blueprint $table) {
             $table->id();
+            $table->boolean("admin");
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->constrained()
                 ->onUpdate('cascade')

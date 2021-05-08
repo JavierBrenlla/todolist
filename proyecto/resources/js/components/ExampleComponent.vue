@@ -92,12 +92,10 @@ export default {
       // si selector es igual a 0 opcion pasa a valer 0
       if (selector == 0) {
         this.opcion = 0;
-        console.log(this.opcion);
 
         // en caso contrario opcion vale 1
       } else {
         this.opcion = 1;
-        console.log(this.opcion);
       }
     },
 
@@ -126,7 +124,7 @@ export default {
             console.log(error);
           });
       }else{
-        fetch("/crear_tarea", init)
+        fetch("/crear_lista", init)
           .then((result) => {
             console.log(result);
           })
