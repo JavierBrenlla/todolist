@@ -2,6 +2,7 @@
 
 use App\Models\Proyecto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -224,6 +225,13 @@ Route::post('/obtener_proyectos', function (Request $request) {
     $smtp->execute();
     $objeto->resultados = $smtp->fetchAll();
     echo json_encode($objeto);
+});
+
+Route::get('/proyecto/{id}', function (Request $request) {
+     
+    $listas = DB::table('proyectos_listas')->join("listas","listas.id","=","proyectos_listas.proyecto_id")->where("proyecto_id","=",$request->id)->get();
+
+     return view("plantillas.listas")->with("datos",$listas);
 });
 
 /* ---------------------------------------------------------------------------------------------- */
