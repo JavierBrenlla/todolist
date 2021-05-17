@@ -229,9 +229,69 @@ Route::post('/obtener_proyectos', function (Request $request) {
 
 Route::get('/proyecto/{id}', function (Request $request) {
      
-    $listas = DB::table('proyectos_listas')->join("listas","listas.id","=","proyectos_listas.proyecto_id")->where("proyecto_id","=",$request->id)->get();
+    $listas = DB::table('proyectos_listas')->join("listas","listas.id","=","proyectos_listas.lista_id")->where("proyecto_id","=",$request->id)->get();
 
-     return view("plantillas.listas")->with("datos",$listas);
+     return view("plantillas.listas")->with("datos",$listas)->with("id",$request->id);
+});
+
+Route::post('/crear_listaProyecto', function (Request $request) {
+
+    // Cabecera de resultado en JSON.
+    header('Content-Type: application/json');
+
+    // Constantes de configuración de la aplicación.
+
+    /* Parte de conexion a la base de datos */
+
+    define('DB_SERVIDOR', 'localhost');
+    define('DB_PUERTO', '3306');
+    define('DB_BASEDATOS', 'todolist');
+    define('DB_USUARIO', 'todolist');
+    define('DB_PASSWORD', 'abc123.');
+
+    try {
+        $cadenaConexion = "mysql:host=" . DB_SERVIDOR . ";port=" . DB_PUERTO . ";dbname=" . DB_BASEDATOS . ";charset=utf8";
+        $pdo = new PDO($cadenaConexion, DB_USUARIO, DB_PASSWORD);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die("Error conectando a servidor de base de datos: " . $e->getMessage());
+    }
+
+    $titulo = $request->input('titulo');
+    $fecha = date('Y-m-d G:i:s');
+    $descripcion = $request->input('descripcion');
+
+    /* Consulta crear proyecto */
+
+        // Preparar consulta
+
+        $smtp = $pdo->prepare("insert into listas (nombre, descripcion, fecha_creacion) values (:titulo,:descripcion,:fecha_creacion)");
+
+        // Bindeo de parametros
+
+        $smtp->bindParam(":titulo", $titulo);
+        $smtp->bindParam(":descripcion", $descripcion);
+        $smtp->bindParam(":fecha_creacion", $fecha);
+
+        // Ejecutar consulta
+
+        $smtp->execute();
+
+        $proyectoID = $request->input('proyectoID');
+        $listaID = DB::table('listas')->latest('id')->first()->id;
+
+
+        $smtp = $pdo->prepare("insert into proyectos_listas (proyecto_id, lista_id) values (:proyectoID,:listaID)");
+
+        // Bindeo de parametros
+
+        $smtp->bindParam(":proyectoID", $proyectoID);
+        $smtp->bindParam(":listaID", $listaID);
+
+        // Ejecutar consulta
+
+        $smtp->execute();
 });
 
 /* ---------------------------------------------------------------------------------------------- */

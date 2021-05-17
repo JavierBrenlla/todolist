@@ -18,7 +18,7 @@ class CreateListasTable extends Migration
             $table->string("nombre", 50);
             $table->string("descripcion", 500);
             $table->dateTime("fecha_creacion");
-            $table->boolean("recursiva");
+            $table->boolean("recursiva")->nullable();
             $table->enum("repetir", ["d", "s", "m"])->nullable();
             $table->dateTime("fin")->nullable();
             $table->timestamps();
