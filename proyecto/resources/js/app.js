@@ -25,6 +25,7 @@ Vue.use(Vuetify);
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('listar-elementos', require('./components/listar-elementos.vue').default);
 Vue.component('crear-lista', require('./components/crear-lista.vue').default);
+Vue.component('listar-listas', require('./components/listar-listas.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

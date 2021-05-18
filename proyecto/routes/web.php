@@ -294,6 +294,13 @@ Route::post('/crear_listaProyecto', function (Request $request) {
         $smtp->execute();
 });
 
+Route::get('/lista/{id}', function (Request $request) {
+
+    $tareas = DB::table('tareas')->where("lista_id","=",$request->id)->get();
+
+     return view("plantillas.tareas")->with("tareas", $tareas);
+});
+
 /* ---------------------------------------------------------------------------------------------- */
 
 // Rutas del modulo de autenticacion
