@@ -8,16 +8,24 @@
       </template>
       <v-card>
         <v-card-title>
-          <span class="headline">Nueva Lista</span>
+          <span class="headline">Nueva Tarea</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12" sm="12" md="12">
-                <v-text-field label="Nombre" required id="nombre"></v-text-field>
+                <v-text-field
+                  label="Nombre"
+                  required
+                  id="nombre"
+                ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-textarea name="descripcion" label="Descripcion" id="descripcion"></v-textarea>
+                <v-textarea
+                  name="descripcion"
+                  label="Descripcion"
+                  id="descripcion"
+                ></v-textarea>
               </v-col>
             </v-row>
           </v-container>
@@ -27,7 +35,7 @@
           <v-btn color="blue darken-1" text @click="dialog = false">
             Cerrar
           </v-btn>
-          <v-btn color="blue darken-1" text @click="crearLista()">
+          <v-btn color="blue darken-1" text @click="crearTarea()">
             Crear
           </v-btn>
         </v-card-actions>
@@ -42,7 +50,7 @@ export default {
     dialog: false,
   }),
   methods: {
-    crearLista: function () {
+    crearTarea: function () {
       let laravelToken = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
@@ -55,22 +63,23 @@ export default {
         },
         body: `titulo=${document.getElementById("nombre").value}&descripcion=${
           document.getElementById("descripcion").value
-        }&proyectoID=${this.listaid}&userID=${this.userid}`,
+        }&listaID=${this.listaid}`,
       };
 
-      fetch("/crear_listaProyecto", init)
-          .then((result) => {
-            console.log(result);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-
       this.dialog = false;
+
+      fetch("/crear_tarea", init)
+        .then((result) => {
+          console.log(result);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
       document.getElementById("nombre").value = "";
       document.getElementById("descripcion").value = "";
     },
   },
-  props: ['listaid', 'userid'],
+  props: ["listaid"],
 };
 </script>

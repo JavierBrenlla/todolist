@@ -26,6 +26,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('listar-elementos', require('./components/listar-elementos.vue').default);
 Vue.component('crear-lista', require('./components/crear-lista.vue').default);
 Vue.component('listar-listas', require('./components/listar-listas.vue').default);
+Vue.component('crear-tarea', require('./components/crear-tarea.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

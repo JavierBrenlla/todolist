@@ -23,6 +23,10 @@ class CreateProyectosListasTable extends Migration
             $table->foreign('lista_id')->references('id')->on('listas')->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

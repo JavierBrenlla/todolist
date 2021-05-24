@@ -1,8 +1,9 @@
-{{-- {{ dd($tareas) }} --}}
+{{-- {{ dd($listaID) }} --}}
 @extends('plantillas.master')
 @section('titulo',Auth::user()->name)
 
 @section('central')
+<crear-tarea listaid="{{ $listaID }}"></crear-tarea>
 @php
     $cabeceras = array("nombre", "descripcion") 
 @endphp
