@@ -400,6 +400,27 @@ Route::post('/crear_tarea', function (Request $request) {
     $smtp->execute();
 });
 
+Route::POST('/cantidad_tareas', function (Request $request) {
+
+    $objeto = new stdClass();
+
+    $users = DB::table('tareas')->select('id')->where('lista_id', '=', $_POST['listaid'])->get();
+
+    $objeto->resultados = $users;
+    echo json_encode($objeto);
+
+});
+
+Route::POST('/completar_tarea', function (Request $request) {
+
+    $id = $request->id;
+
+    $affected = DB::table('tareas')
+              ->where('id', '=', $id)
+              ->update(['fin' => true]);
+
+});
+
 /* ---------------------------------------------------------------------------------------------- */
 
 // Rutas del modulo de autenticacion

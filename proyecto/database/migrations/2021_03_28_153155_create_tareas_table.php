@@ -18,7 +18,7 @@ class CreateTareasTable extends Migration
             $table->string("nombre", 50);
             $table->string("descripcion", 500);
             $table->dateTime("fecha_creacion");
-            $table->dateTime("fin")->nullable();
+            $table->boolean("fin")->nullable();
             $table->unsignedBigInteger('lista_id');
             $table->foreign('lista_id')->references('id')->on('listas');
             $table->timestamps();

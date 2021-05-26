@@ -8,10 +8,21 @@
     <title>ToDoLis - @yield('titulo')</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- https://material.io/resources/icons/?style=baseline -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <!-- https://material.io/resources/icons/?style=outline -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet">
+    <!-- https://material.io/resources/icons/?style=round -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Round" rel="stylesheet">
+    <!-- https://material.io/resources/icons/?style=sharp -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Sharp" rel="stylesheet">
+    <!-- https://material.io/resources/icons/?style=twotone -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-sm navbar-expand-lg navbar-expand-md navbar-expand-xl navbar-dark bg-dark flex-row container text-left">
+    <nav
+        class="navbar navbar-expand-sm navbar-expand-lg navbar-expand-md navbar-expand-xl navbar-dark bg-dark flex-row container text-left">
         <a href="/listar_proyectos/{{ auth()->user()->id }}" class="btn btn-primary text-white m-2">Proyectos</a>
         <a href="/listar_listas" class="btn btn-primary text-white m-2">Listas</a>
         @auth
@@ -37,6 +48,13 @@
         @yield('central')
     </div>
 
+    <div>
+        @yield('contenido')
+    </div>
+
+    <div id="scripts">
+        @yield('scripts')
+    </div>
 
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('css/app.css') }}"></script>
