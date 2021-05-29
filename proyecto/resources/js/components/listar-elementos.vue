@@ -1,13 +1,15 @@
 <template>
   <body>
-    <a :href="enlace(proyecto.proyectoID)" v-for="(proyecto, i) in proyectos"
-          :key="i">
-    <div class="proyectos" >
-            <p class="texto">{{ proyecto.proyectoNombre }}</p>
-            <hr>
-            <p class="texto">{{ proyecto.proyectoDescripcion }}</p>
-          </div>
-          </a>
+    <div v-for="(proyecto, i) in proyectos" :key="i">
+      <a :href="enlace(proyecto.proyectoID)">
+        <div class="proyectos">
+          <p class="texto">{{ proyecto.proyectoNombre }}</p>
+          <hr />
+          <p class="texto">{{ proyecto.proyectoDescripcion }}</p>
+        </div>
+      </a>
+      <compartir-elemento :listaid="proyecto.proyectoID" opcion="0"></compartir-elemento>
+    </div>
   </body>
 </template>
 
@@ -41,9 +43,9 @@ export default {
         });
     },
 
-    enlace: function($id){
-      return "/proyecto/"+$id;
-    }
+    enlace: function ($id) {
+      return "/proyecto/" + $id;
+    },
   },
   created() {
     this.listarProyectos();

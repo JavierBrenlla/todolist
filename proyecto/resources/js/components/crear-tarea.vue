@@ -20,13 +20,6 @@
                   id="nombre"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
-                <v-textarea
-                  name="descripcion"
-                  label="Descripcion"
-                  id="descripcion"
-                ></v-textarea>
-              </v-col>
             </v-row>
           </v-container>
         </v-card-text>
@@ -61,9 +54,7 @@ export default {
           "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
           "X-CSRF-TOKEN": laravelToken,
         },
-        body: `titulo=${document.getElementById("nombre").value}&descripcion=${
-          document.getElementById("descripcion").value
-        }&listaID=${this.listaid}`,
+        body: `titulo=${document.getElementById("nombre").value}&listaID=${this.listaid}`,
       };
 
       this.dialog = false;
@@ -77,7 +68,6 @@ export default {
         });
 
       document.getElementById("nombre").value = "";
-      document.getElementById("descripcion").value = "";
     },
   },
   props: ["listaid"],

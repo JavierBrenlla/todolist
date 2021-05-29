@@ -228,10 +228,10 @@ Route::post('/obtener_proyectos', function (Request $request) {
 });
 
 Route::get('/proyecto/{id}', function (Request $request) {
-     
-    $listas = DB::table('proyectos_listas')->join("listas","listas.id","=","proyectos_listas.lista_id")->where("proyecto_id","=",$request->id)->get();
 
-     return view("plantillas.listas")->with("datos",$listas)->with("id",$request->id);
+    $listas = DB::table('proyectos_listas')->join("listas", "listas.id", "=", "proyectos_listas.lista_id")->where("proyecto_id", "=", $request->id)->get();
+
+    return view("plantillas.listas")->with("datos", $listas)->with("id", $request->id);
 });
 
 Route::post('/crear_listaProyecto', function (Request $request) {
@@ -264,65 +264,65 @@ Route::post('/crear_listaProyecto', function (Request $request) {
 
     /* Consulta crear proyecto */
 
-        // Preparar consulta
+    // Preparar consulta
 
-        $smtp = $pdo->prepare("insert into listas (nombre, descripcion, fecha_creacion) values (:titulo,:descripcion,:fecha_creacion)");
+    $smtp = $pdo->prepare("insert into listas (nombre, descripcion, fecha_creacion) values (:titulo,:descripcion,:fecha_creacion)");
 
-        // Bindeo de parametros
+    // Bindeo de parametros
 
-        $smtp->bindParam(":titulo", $titulo);
-        $smtp->bindParam(":descripcion", $descripcion);
-        $smtp->bindParam(":fecha_creacion", $fecha);
+    $smtp->bindParam(":titulo", $titulo);
+    $smtp->bindParam(":descripcion", $descripcion);
+    $smtp->bindParam(":fecha_creacion", $fecha);
 
-        // Ejecutar consulta
+    // Ejecutar consulta
 
-        $smtp->execute();
+    $smtp->execute();
 
-        $proyectoID = $request->input('proyectoID');
-        $userID = $request->input('userID');
-        $listaID = DB::table('listas')->latest('id')->first()->id;
+    $proyectoID = $request->input('proyectoID');
+    $userID = $request->input('userID');
+    $listaID = DB::table('listas')->latest('id')->first()->id;
 
 
-        $smtp = $pdo->prepare("insert into proyectos_listas (proyecto_id, lista_id, user_id) values (:proyectoID,:listaID, :userID)");
+    $smtp = $pdo->prepare("insert into proyectos_listas (proyecto_id, lista_id, user_id) values (:proyectoID,:listaID, :userID)");
 
-        // Bindeo de parametros
+    // Bindeo de parametros
 
-        $smtp->bindParam(":proyectoID", $proyectoID);
-        $smtp->bindParam(":listaID", $listaID);
-        $smtp->bindParam(":userID", $userID);
+    $smtp->bindParam(":proyectoID", $proyectoID);
+    $smtp->bindParam(":listaID", $listaID);
+    $smtp->bindParam(":userID", $userID);
 
-        // Ejecutar consulta
+    // Ejecutar consulta
 
-        $smtp->execute();
+    $smtp->execute();
 
-        $smtp = $pdo->prepare("SELECT id FROM `listas` ORDER by id desc limit 1");
-        $smtp->execute();
+    $smtp = $pdo->prepare("SELECT id FROM `listas` ORDER by id desc limit 1");
+    $smtp->execute();
 
-        $id_lista = $smtp->fetch();
+    $id_lista = $smtp->fetch();
 
-        $smtp = $pdo->prepare("INSERT INTO `usuario_listas` (`admin`, `user_id`, `lista_id`) VALUES (:admin, :user_id, :id_lista)");
+    $smtp = $pdo->prepare("INSERT INTO `usuario_listas` (`admin`, `user_id`, `lista_id`) VALUES (:admin, :user_id, :id_lista)");
 
-        // variables para bindear
+    // variables para bindear
 
-        $numero = 1;
+    $numero = 1;
 
-        // variable del id de usuario
-        $id = Auth::id();
+    // variable del id de usuario
+    $id = Auth::id();
 
-        $smtp->bindParam(":admin", $numero);
-        $smtp->bindParam(":user_id", $userID);
-        $smtp->bindParam(":id_lista", $listaID);
+    $smtp->bindParam(":admin", $numero);
+    $smtp->bindParam(":user_id", $userID);
+    $smtp->bindParam(":id_lista", $listaID);
 
-        // ejecutar consulta
+    // ejecutar consulta
 
-        $smtp->execute();
+    $smtp->execute();
 });
 
 Route::get('/lista/{id}', function (Request $request) {
 
-    $tareas = DB::table('tareas')->where("lista_id","=",$request->id)->get();
+    $tareas = DB::table('tareas')->where("lista_id", "=", $request->id)->get();
 
-     return view("plantillas.tareas")->with("tareas", $tareas)->with("listaID", $request->id);
+    return view("plantillas.tareas")->with("tareas", $tareas)->with("listaID", $request->id);
 });
 
 Route::get('/listar_proyectos/{userID}', function (Request $request) {
@@ -386,12 +386,11 @@ Route::post('/crear_tarea', function (Request $request) {
     $descripcion = $request->descripcion;
     $fecha = date('Y-m-d G:i:s');
 
-    $smtp = $pdo->prepare("INSERT INTO `tareas`(`nombre`, `descripcion`, `fecha_creacion`, `lista_id`) values (:nombre, :descripcion, :fecha_creacion, :listaID)");
+    $smtp = $pdo->prepare("INSERT INTO `tareas`(`nombre`, `fecha_creacion`, `lista_id`) values (:nombre, :fecha_creacion, :listaID)");
 
     // Bindeo de parametros
 
     $smtp->bindParam(":nombre", $nombre);
-    $smtp->bindParam(":descripcion", $descripcion);
     $smtp->bindParam(":fecha_creacion", $fecha);
     $smtp->bindParam(":listaID", $listaID);
 
@@ -408,7 +407,6 @@ Route::POST('/cantidad_tareas', function (Request $request) {
 
     $objeto->resultados = $users;
     echo json_encode($objeto);
-
 });
 
 Route::POST('/completar_tarea', function (Request $request) {
@@ -416,9 +414,92 @@ Route::POST('/completar_tarea', function (Request $request) {
     $id = $request->id;
 
     $affected = DB::table('tareas')
-              ->where('id', '=', $id)
-              ->update(['fin' => true]);
+        ->where('id', '=', $id)
+        ->update(['fin' => true]);
+});
 
+Route::POST('/borrar_tarea', function (Request $request) {
+
+    $id = $request->id;
+
+    DB::table('tareas')->where('id', '=', $id)->delete();
+});
+
+Route::POST('/obtener_emails', function (Request $request) {
+
+    $objeto = new stdClass();
+
+    $emails = DB::table('users')
+        ->select('email')
+        ->get();
+
+    $objeto->resultados = $emails;
+    echo json_encode($objeto);
+});
+
+Route::POST('/compartir', function (Request $request) {
+
+    define('DB_SERVIDOR', 'localhost');
+    define('DB_PUERTO', '3306');
+    define('DB_BASEDATOS', 'todolist');
+    define('DB_USUARIO', 'todolist');
+    define('DB_PASSWORD', 'abc123.');
+
+    try {
+        $cadenaConexion = "mysql:host=" . DB_SERVIDOR . ";port=" . DB_PUERTO . ";dbname=" . DB_BASEDATOS . ";charset=utf8";
+        $pdo = new PDO($cadenaConexion, DB_USUARIO, DB_PASSWORD);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die("Error conectando a servidor de base de datos: " . $e->getMessage());
+    }
+
+    if ($request->opcion == 1 or $request->opcion == 0) {
+        # code...
+
+
+        if ($request->opcion == 1) {
+            $email = $request->email;
+            $smtp = $pdo->prepare("SELECT id FROM `users` where email = :email");
+            $smtp->bindParam(":email", $email);
+            $smtp->execute();
+            $id = $smtp->fetch()['id'];
+            $listaID = $request->listaID;
+            $admin = $request->admin;
+
+            $smtp = $pdo->prepare("INSERT INTO `usuario_listas`(`admin`, `user_id`, `lista_id`) values (:admin, :user_id, :listaID)");
+
+            // Bindeo de parametros
+
+            $smtp->bindParam(":admin", $admin, PDO::PARAM_INT);
+            $smtp->bindParam(":user_id", $id, PDO::PARAM_INT);
+            $smtp->bindParam(":listaID", $listaID, PDO::PARAM_INT);
+
+            // Ejecutar consulta
+
+            $smtp->execute();
+        } else {
+            $email = $request->email;
+            $smtp = $pdo->prepare("SELECT id FROM `users` where email = :email");
+            $smtp->bindParam(":email", $email);
+            $smtp->execute();
+            $id = $smtp->fetch()['id'];
+            $listaID = $request->listaID;
+            $admin = $request->admin;
+
+            $smtp = $pdo->prepare("INSERT INTO `usuario_proyectos`(`admin`, `user_id`, `proyecto_id`) values (:admin, :user_id, :listaID)");
+
+            // Bindeo de parametros
+
+            $smtp->bindParam(":admin", $admin, PDO::PARAM_INT);
+            $smtp->bindParam(":user_id", $id, PDO::PARAM_INT);
+            $smtp->bindParam(":listaID", $listaID, PDO::PARAM_INT);
+
+            // Ejecutar consulta
+
+            $smtp->execute();
+        }
+    }
 });
 
 /* ---------------------------------------------------------------------------------------------- */

@@ -12,5 +12,6 @@
                 <p>{{ $datos[$i]->descripcion }}</p>
             </div>
         </a>
+        <compartir-elemento listaid="{{ $id }}" opcion="1"></compartir-elemento>
     @endfor
 @endsection

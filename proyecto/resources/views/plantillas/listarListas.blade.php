@@ -12,5 +12,6 @@
         <p>{{ $listas[$i]['descripcion'] }}</p>
     </div>
 </a>
+<compartir-elemento listaid="{{ $listas[$i]['lista_id'] }}" opcion="1"></compartir-elemento>
 @endfor
 @endsection
