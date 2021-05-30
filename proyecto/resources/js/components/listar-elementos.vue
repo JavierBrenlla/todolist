@@ -8,7 +8,10 @@
           <p class="texto">{{ proyecto.proyectoDescripcion }}</p>
         </div>
       </a>
-      <compartir-elemento :listaid="proyecto.proyectoID" opcion="0"></compartir-elemento>
+      <div class="acciones">
+      <span><compartir-elemento :listaid="proyecto.proyectoID" opcion="0" class="share"></compartir-elemento></span>
+      <span><borrar-componente class="delete" :proyectoid="proyecto.proyectoID" opcion="0"></borrar-componente></span>
+      </div>
     </div>
   </body>
 </template>

@@ -330,7 +330,7 @@ Route::get('/listar_proyectos/{userID}', function (Request $request) {
     return view('plantillas.paginaprincipal');
 });
 
-Route::get('/listar_listas', function (Request $request) {
+/* Route::get('/listar_listas', function (Request $request) {
 
     define('DB_SERVIDOR', 'localhost');
     define('DB_PUERTO', '3306');
@@ -349,7 +349,7 @@ Route::get('/listar_listas', function (Request $request) {
 
     $id = Auth::id();
 
-    $smtp = $pdo->prepare("SELECT usuario_listas.admin, usuario_listas.user_id,proyectos_listas.proyecto_id,listas.nombre,listas.descripcion, usuario_listas.lista_id FROM `usuario_listas` INNER join listas on usuario_listas.lista_id = listas.id INNER join proyectos_listas on listas.id = proyectos_listas.lista_id where usuario_listas.user_id = :userID");
+    $smtp = $pdo->prepare("SELECT usuario_listas.admin, usuario_listas.user_id,proyectos_listas.proyecto_id,listas.nombre,listas.descripcion, usuario_listas.lista_id FROM `usuario_listas` left join listas on usuario_listas.lista_id = listas.id left join proyectos_listas on listas.id = proyectos_listas.lista_id where usuario_listas.user_id = :userID");
 
     // Bindeo de parametros
 
@@ -362,6 +362,48 @@ Route::get('/listar_listas', function (Request $request) {
     $listas = $smtp->fetchAll();
 
     return view('plantillas.listarListas')->with('listas', $listas);
+}); */
+
+Route::get('/listar_listas', function (Request $request) {
+
+    return view('plantillas.listarListas');
+
+});
+
+Route::post('/obtener_listas', function (Request $request) {
+
+    $objeto = new stdClass();
+
+    define('DB_SERVIDOR', 'localhost');
+    define('DB_PUERTO', '3306');
+    define('DB_BASEDATOS', 'todolist');
+    define('DB_USUARIO', 'todolist');
+    define('DB_PASSWORD', 'abc123.');
+
+    try {
+        $cadenaConexion = "mysql:host=" . DB_SERVIDOR . ";port=" . DB_PUERTO . ";dbname=" . DB_BASEDATOS . ";charset=utf8";
+        $pdo = new PDO($cadenaConexion, DB_USUARIO, DB_PASSWORD);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die("Error conectando a servidor de base de datos: " . $e->getMessage());
+    }
+
+    $id = Auth::id();
+
+    $smtp = $pdo->prepare("SELECT usuario_listas.admin, usuario_listas.user_id,proyectos_listas.proyecto_id,listas.nombre,listas.descripcion, usuario_listas.lista_id FROM `usuario_listas` left join listas on usuario_listas.lista_id = listas.id left join proyectos_listas on listas.id = proyectos_listas.lista_id where usuario_listas.user_id = :userID");
+
+    // Bindeo de parametros
+
+    $smtp->bindParam(":userID", $id);
+
+    // Ejecutar consulta
+
+    $smtp->execute();
+
+    $objeto->resultados = $smtp->fetchAll();
+    echo json_encode($objeto);
+
 });
 
 Route::post('/crear_tarea', function (Request $request) {
@@ -500,6 +542,21 @@ Route::POST('/compartir', function (Request $request) {
             $smtp->execute();
         }
     }
+});
+
+Route::POST('/borrar_elemento', function (Request $request) {
+
+    if ($request->opcion == 1 or $request->opcion == 0) {
+        $id = $request->id;
+
+        if ($request->opcion == 1) {
+            DB::table('listas')->where('id', '=', $id)->delete();
+        }else{
+            DB::table('proyectos')->where('id', '=', $id)->delete();
+        }
+    }
+
+    
 });
 
 /* ---------------------------------------------------------------------------------------------- */

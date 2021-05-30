@@ -13,7 +13,7 @@ class CreateListasTareasTable extends Migration
      */
     public function up()
     {
-        Schema::create('listas_tareas', function (Blueprint $table) {
+        /* Schema::create('listas_tareas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('lista_id');
             $table->foreign('lista_id')->references('id')->on('listas')->constrained()
@@ -24,7 +24,7 @@ class CreateListasTareasTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->timestamps();
-        });
+        }); */
     }
 
     /**

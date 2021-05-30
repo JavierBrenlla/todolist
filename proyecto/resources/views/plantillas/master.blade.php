@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ToDoLis - @yield('titulo')</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- https://material.io/resources/icons/?style=baseline -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">

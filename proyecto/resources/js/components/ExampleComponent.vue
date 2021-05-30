@@ -36,6 +36,7 @@
                   <v-row>
                     <v-col cols="12" sm="12" md="12">
                       <v-text-field
+                      v-model="nombre"
                         label="Titulo*"
                         name="titulo"
                         :id="item.title"
@@ -44,6 +45,7 @@
                     </v-col>
                     <v-col cols="12" sm="12" md="12">
                       <v-textarea
+                      v-model="descripcion"
                         :id="item.nombre"
                         name="descripcion"
                         label="Descripcion"
@@ -71,6 +73,7 @@
 </template>
 
 <script>
+import listarElementosVue from './listar-elementos.vue';
 export default {
   data: () => ({
     items: [
@@ -83,6 +86,9 @@ export default {
 
     // variable para controlar si se crea un proyecto o una tarea
     opcion: 10,
+
+    nombre:"",
+    descripcion:"",
   }),
   methods: {
 
@@ -110,8 +116,8 @@ export default {
           "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
           "X-CSRF-TOKEN": laravelToken,
         },
-        body: `titulo=${document.getElementById("Lista").value}&descripcion=${
-          document.getElementById("listaArea").value
+        body: `titulo=${this.nombre}&descripcion=${
+          this.descripcion
         }`,
       };
 
@@ -119,6 +125,7 @@ export default {
         fetch("/crear_proyecto", init)
           .then((result) => {
             console.log(result);
+            this.$root.$children[1].listarProyectos();
           })
           .catch(function (error) {
             console.log(error);
@@ -127,17 +134,22 @@ export default {
         fetch("/crear_lista", init)
           .then((result) => {
             console.log(result);
+            this.$root.$children[1].listarProyectos();
           })
           .catch(function (error) {
             console.log(error);
           });
       }
 
-      document.getElementById("Lista").value = "";
-      document.getElementById("listaArea").value = "";
+      this.nombre="";
+      this.descripcion="";
 
       this.dialog = false;
+      
     },
   },
+  mounted() {
+    this.$root.$children[1].listarProyectos();
+  }
 };
 </script>

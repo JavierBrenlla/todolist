@@ -1,0 +1,26 @@
+.acciones {
+  padding-left: 5%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.share {
+  width: 75px;
+  margin: 0;
+}
+
+.delete {
+  width: 75px;
+  margin: 0;
+}
+
+div.proyectos {
+  margin-top: 10%;
+  margin-right: 50%;
+}
+/*# sourceMappingURL=style.css.map */

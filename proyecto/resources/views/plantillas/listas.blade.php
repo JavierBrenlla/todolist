@@ -12,6 +12,9 @@
                 <p>{{ $datos[$i]->descripcion }}</p>
             </div>
         </a>
-        <compartir-elemento listaid="{{ $id }}" opcion="1"></compartir-elemento>
+        <div class="acciones">
+        <span><compartir-elemento listaid="{{ $id }}" opcion="1" class="share"></compartir-elemento></span>
+        <span><borrar-componente proyectoid="{{ $datos[$i]->lista_id }}" opcion="1" class="delete"></borrar-componente></span>
+    </div>
     @endfor
 @endsection

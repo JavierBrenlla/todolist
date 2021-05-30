@@ -20,7 +20,9 @@ class CreateTareasTable extends Migration
             $table->dateTime("fecha_creacion");
             $table->boolean("fin")->nullable();
             $table->unsignedBigInteger('lista_id');
-            $table->foreign('lista_id')->references('id')->on('listas');
+            $table->foreign('lista_id')->references('id')->on('listas')->constrained()
+            ->onUpdate('cascade')
+            ->onDelete('cascade');;
             $table->timestamps();
         });
     }
