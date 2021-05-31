@@ -320,9 +320,22 @@ Route::post('/crear_listaProyecto', function (Request $request) {
 
 Route::get('/lista/{id}', function (Request $request) {
 
-    $tareas = DB::table('tareas')->where("lista_id", "=", $request->id)->get();
+    // $tareas = DB::table('tareas')->where("lista_id", "=", $request->id)->get();
 
-    return view("plantillas.tareas")->with("tareas", $tareas)->with("listaID", $request->id);
+    // return view("plantillas.tareas")->with("tareas", $tareas)->with("listaID", $request->id);
+    return view("plantillas.tareas")->with("tareas", $request->id);
+});
+
+Route::post('/obtener_tareas', function (Request $request) {
+
+    $objeto = new stdClass();
+    $id = $request->listaid;
+
+    $tareas = DB::table('tareas')->where("lista_id", "=", $id)->get();
+
+    $objeto->resultados = $tareas;
+    echo json_encode($objeto);
+    
 });
 
 Route::get('/listar_proyectos/{userID}', function (Request $request) {
@@ -453,7 +466,7 @@ Route::POST('/cantidad_tareas', function (Request $request) {
 
 Route::POST('/completar_tarea', function (Request $request) {
 
-    $id = $request->id;
+    $id = $request->tareaid;
 
     $affected = DB::table('tareas')
         ->where('id', '=', $id)
@@ -462,7 +475,7 @@ Route::POST('/completar_tarea', function (Request $request) {
 
 Route::POST('/borrar_tarea', function (Request $request) {
 
-    $id = $request->id;
+    $id = $request->tareaid;
 
     DB::table('tareas')->where('id', '=', $id)->delete();
 });

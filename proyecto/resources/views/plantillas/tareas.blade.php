@@ -1,13 +1,14 @@
-{{-- {{ dd(sizeof($tareas)) }} --}}
+{{-- {{ dd($tareas) }} --}}
 @extends('plantillas.master')
 
 @section('titulo', Auth::user()->name)
 
 @section('central')
-    <crear-tarea listaid="{{ $listaID }}"></crear-tarea>
+    <crear-tarea listaid="{{ $tareas }}"></crear-tarea>
+    <listar-tareas listaid="{{ $tareas }}"></listar-tareas>
 @endsection
 
-@if (sizeof($tareas) != 0)
+{{-- @if (sizeof($tareas) != 0)
 
     @section('contenido')
         @php
@@ -37,7 +38,7 @@
         </table>
         <input type="hidden" name="listaId" id="listaId" value="{{ $tareas[0]->lista_id }}">
         @endsection
-    @endif
+    @endif --}}
     @section('scripts')
         <script src="{{ asset('js/tareas.js') }}"></script>
     @endsection

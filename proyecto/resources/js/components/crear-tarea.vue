@@ -15,6 +15,7 @@
             <v-row>
               <v-col cols="12" sm="12" md="12">
                 <v-text-field
+                  v-model="tarea"
                   label="Nombre"
                   required
                   id="nombre"
@@ -41,6 +42,7 @@
 export default {
   data: () => ({
     dialog: false,
+    tarea: "",
   }),
   methods: {
     crearTarea: function () {
@@ -54,7 +56,9 @@ export default {
           "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
           "X-CSRF-TOKEN": laravelToken,
         },
-        body: `titulo=${document.getElementById("nombre").value}&listaID=${this.listaid}`,
+        body: `titulo=${this.tarea}&listaID=${
+          this.listaid
+        }`,
       };
 
       this.dialog = false;
@@ -62,12 +66,13 @@ export default {
       fetch("/crear_tarea", init)
         .then((result) => {
           console.log(result);
+          this.$root.$children[1].listarProyectos();
         })
         .catch(function (error) {
           console.log(error);
         });
 
-      document.getElementById("nombre").value = "";
+      this.tarea = "";
     },
   },
   props: ["listaid"],

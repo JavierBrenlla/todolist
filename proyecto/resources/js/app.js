@@ -30,6 +30,9 @@ Vue.component('crear-tarea', require('./components/crear-tarea.vue').default);
 Vue.component('compartir-elemento', require('./components/compartir-elemento.vue').default);
 Vue.component('componente-probas', require('./components/componente-probas.vue').default);
 Vue.component('borrar-componente', require('./components/borrar-componente.vue').default);
+Vue.component('listar-tareas', require('./components/listar-tareas.vue').default);
+Vue.component('completar-tarea', require('./components/completar-tarea.vue').default);
+Vue.component('eliminar-tarea', require('./components/eliminar-tarea.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
