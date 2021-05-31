@@ -229,9 +229,20 @@ Route::post('/obtener_proyectos', function (Request $request) {
 
 Route::get('/proyecto/{id}', function (Request $request) {
 
-    $listas = DB::table('proyectos_listas')->join("listas", "listas.id", "=", "proyectos_listas.lista_id")->where("proyecto_id", "=", $request->id)->get();
+    return view("plantillas.listas")->with("id", $request->id);
+});
 
-    return view("plantillas.listas")->with("datos", $listas)->with("id", $request->id);
+Route::post('/obtener_listas_proyetos', function (Request $request) {
+
+    $id = $request->id;
+
+    $objeto = new stdClass();
+
+    $listas = DB::table('proyectos_listas')->join("listas", "listas.id", "=", "proyectos_listas.lista_id")->where("proyecto_id", "=", $id)->get();
+
+    $objeto->resultados = $listas;
+    echo json_encode($objeto);
+
 });
 
 Route::post('/crear_listaProyecto', function (Request $request) {
@@ -568,8 +579,34 @@ Route::POST('/borrar_elemento', function (Request $request) {
             DB::table('proyectos')->where('id', '=', $id)->delete();
         }
     }
+});
 
-    
+Route::POST('/editar_proyecto', function (Request $request) {
+    $objeto = new stdClass();
+    $id = $request->proyectoid;
+    $query = DB::table('proyectos')->select('nombre', 'descripcion')->where('id','=', $id)->get();
+    $objeto->resultados = $query;
+    echo json_encode($objeto);
+});
+
+Route::POST('/editar_lista', function (Request $request) {
+    $objeto = new stdClass();
+    $id = $request->proyectoid;
+    $query = DB::table('listas')->select('nombre', 'descripcion')->where('id','=', $id)->get();
+    $objeto->resultados = $query;
+    echo json_encode($objeto);
+});
+
+Route::POST('/modificar_proyecto', function (Request $request) {
+    $affected = DB::table('proyectos')
+              ->where('id','=', $request->proyectoid)
+              ->update(['nombre' => $request->nombre, 'descripcion' => $request->descripcion]);
+});
+
+Route::POST('/modificar_lista', function (Request $request) {
+    $affected = DB::table('listas')
+              ->where('id','=', $request->proyectoid)
+              ->update(['nombre' => $request->nombre, 'descripcion' => $request->descripcion]);
 });
 
 /* ---------------------------------------------------------------------------------------------- */

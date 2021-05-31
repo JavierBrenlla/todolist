@@ -14,10 +14,10 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="12" md="12">
-                <v-text-field label="Nombre" required id="nombre"></v-text-field>
+                <v-text-field label="Nombre" required id="nombre" v-model="nombre"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-textarea name="descripcion" label="Descripcion" id="descripcion"></v-textarea>
+                <v-textarea name="descripcion" label="Descripcion" id="descripcion" v-model="descripcion"></v-textarea>
               </v-col>
             </v-row>
           </v-container>
@@ -40,6 +40,8 @@
 export default {
   data: () => ({
     dialog: false,
+    nombre:"",
+    descripcion:""
   }),
   methods: {
     crearLista: function () {
@@ -53,22 +55,23 @@ export default {
           "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
           "X-CSRF-TOKEN": laravelToken,
         },
-        body: `titulo=${document.getElementById("nombre").value}&descripcion=${
-          document.getElementById("descripcion").value
+        body: `titulo=${this.nombre}&descripcion=${
+          this.descripcion
         }&proyectoID=${this.listaid}&userID=${this.userid}`,
       };
 
       fetch("/crear_listaProyecto", init)
           .then((result) => {
-            console.log(result);
+            console.log(this.$root);
+          this.$root.$children[1].listarProyectos();
           })
           .catch(function (error) {
             console.log(error);
           });
 
       this.dialog = false;
-      document.getElementById("nombre").value = "";
-      document.getElementById("descripcion").value = "";
+      this.nombre = "";
+      this.descripcion = "";
     },
   },
   props: ['listaid', 'userid'],

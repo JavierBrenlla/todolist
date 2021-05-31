@@ -26,21 +26,23 @@ export default {
   }),
   methods: {
     listarProyectos: function () {
+        console.log(this.listaid);
       let laravelToken = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
       let init = {
         method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          "X-CSRF-TOKEN": laravelToken,
-        },
+    headers: {
+      "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+      "X-CSRF-TOKEN": laravelToken,
+    },
+    body: `id=${this.listaid}`,
       };
 
-      fetch("/obtener_listas", init)
+      fetch("/obtener_listas_proyetos", init)
         .then((res) => res.json())
         .then((res) => {
-          // console.log(res.resultados);
+          console.log(res.resultados);
           this.proyectos = res.resultados;
           console.log(this.proyectos);
         })
@@ -56,5 +58,6 @@ export default {
   created() {
     this.listarProyectos();
   },
+  props: ["listaid"],
 };
 </script>

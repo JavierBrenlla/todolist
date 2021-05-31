@@ -33,6 +33,8 @@ Vue.component('borrar-componente', require('./components/borrar-componente.vue')
 Vue.component('listar-tareas', require('./components/listar-tareas.vue').default);
 Vue.component('completar-tarea', require('./components/completar-tarea.vue').default);
 Vue.component('eliminar-tarea', require('./components/eliminar-tarea.vue').default);
+Vue.component('editar-elemento', require('./components/editar-elemento.vue').default);
+Vue.component('listas-proyectos', require('./components/listas-proyectos.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

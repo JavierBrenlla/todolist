@@ -10,6 +10,7 @@
       </a>
       <div class="acciones">
       <span><compartir-elemento :listaid="proyecto.proyectoID" opcion="0" class="share"></compartir-elemento></span>
+      <span><editar-elemento :proyectoid="proyecto.proyectoID" opcion="0" class="share"></editar-elemento></span>
       <span><borrar-componente class="delete" :proyectoid="proyecto.proyectoID" opcion="0"></borrar-componente></span>
       </div>
     </div>
@@ -17,9 +18,11 @@
 </template>
 
 <script>
+import EditarElemento from './editar-elemento.vue';
 export default {
   data: () => ({
     proyectos: [],
+    EditarElemento
   }),
   methods: {
     listarProyectos: function () {
