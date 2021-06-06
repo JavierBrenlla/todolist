@@ -1,5 +1,6 @@
 <template>
   <body>
+    <h3 class="titulo">Tus listas</h3>
     <div v-for="(proyecto, i) in proyectos" :key="i">
       <a :href="enlace(proyecto.lista_id)">
         <div class="proyectos">
@@ -9,9 +10,9 @@
         </div>
       </a>
       <div class="acciones">
-      <span><compartir-elemento :listaid="proyecto.lista_id" opcion="1" class="share"></compartir-elemento></span>
-      <span><editar-elemento :proyectoid="proyecto.lista_id" opcion="1" class="share"></editar-elemento></span>
-      <span><borrar-componente class="delete" :proyectoid="proyecto.lista_id" opcion="1"></borrar-componente></span>
+      <span v-if="proyecto.admin == 1"><compartir-elemento :listaid="proyecto.lista_id" opcion="1" class="share"></compartir-elemento></span>
+      <span v-if="proyecto.admin == 1"><editar-elemento :proyectoid="proyecto.lista_id" opcion="1" class="share"></editar-elemento></span>
+      <span v-if="proyecto.admin == 1"><borrar-componente class="delete" :proyectoid="proyecto.lista_id" opcion="1"></borrar-componente></span>
       </div>
     </div>
   </body>

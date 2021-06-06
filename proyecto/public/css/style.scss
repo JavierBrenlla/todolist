@@ -15,7 +15,7 @@
 }
 
 div.proyectos {
-    margin-top: 10%;
+    margin-top: 2%;
     margin-right: 50%;
 }
 
@@ -26,4 +26,51 @@ div.proyectos {
 
 .algo {
     width: 80% !important;
+}
+
+a {
+    color: white;
+}
+
+a:link {
+
+}
+
+a:visited {
+
+}
+
+a:focus {
+
+}
+
+a:hover {
+    text-decoration: none;
+    color: white;
+}
+
+a:active {
+
+}
+
+.proyectos {
+    background-color: black !important;
+
+    &:hover {
+        background-color: #5B5959 !important;
+    }
+}
+
+.titulo {
+    padding-top: 3%;
+    padding-left: 5%;
+}
+
+#btn-crear {
+    padding-top: 1% !important;
+}
+
+.navbar {
+    max-width: 100% !important;
+    margin: 0 !important;
 }

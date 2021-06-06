@@ -201,7 +201,7 @@ Route::post('/obtener_proyectos', function (Request $request) {
 
     /* Parte de conexion a la base de datos */
 
-    define('DB_SERVIDOR', 'localhost');
+    /* define('DB_SERVIDOR', 'localhost');
     define('DB_PUERTO', '3306');
     define('DB_BASEDATOS', 'todolist');
     define('DB_USUARIO', 'todolist');
@@ -214,16 +214,22 @@ Route::post('/obtener_proyectos', function (Request $request) {
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         die("Error conectando a servidor de base de datos: " . $e->getMessage());
-    }
+    } */
 
     $objeto = new stdClass();
 
     $id = Auth::id();
 
-    $smtp = $pdo->prepare("SELECT up.id as usuarioProyectosID, up.admin as usuarioProyectosAdmin, up.user_id as usuarioProyectosUID,up.proyecto_id as usuarioProyectosPID, u.id as UserID, u.name as UserName, p.id as proyectoID, p.nombre as proyectoNombre, p.descripcion as proyectoDescripcion FROM `usuario_proyectos` up inner join users u on up.user_id = u.id INNER JOIN proyectos p on up.proyecto_id = p.id where `user_id` = :user_id");
+    /* $smtp = $pdo->prepare("SELECT up.id as usuarioProyectosID, cast(up.admin as int) as usuarioProyectosAdmin, up.user_id as usuarioProyectosUID,up.proyecto_id as usuarioProyectosPID, u.id as UserID, u.name as UserName, p.id as proyectoID, p.nombre as proyectoNombre, p.descripcion as proyectoDescripcion FROM `usuario_proyectos` up inner join users u on up.user_id = u.id INNER JOIN proyectos p on up.proyecto_id = p.id where `user_id` = :user_id");
     $smtp->bindParam(":user_id", $id);
-    $smtp->execute();
-    $objeto->resultados = $smtp->fetchAll();
+    $smtp->execute(); */
+
+    $consulta = DB::table('usuario_proyectos')->join("users", "users.id", "=", "usuario_proyectos.user_id")->join("proyectos","proyectos.id", "usuario_proyectos.proyecto_id")->where("usuario_proyectos.user_id","=", $id)->get();
+
+    // $consulta = DB::table('usuario_proyectos')->get();
+
+    // $objeto->resultados = $smtp->fetchAll();
+    $objeto->resultados = $consulta;
     echo json_encode($objeto);
 });
 
@@ -537,7 +543,7 @@ Route::POST('/compartir', function (Request $request) {
 
             // Bindeo de parametros
 
-            $smtp->bindParam(":admin", $admin, PDO::PARAM_INT);
+            $smtp->bindParam(":admin", $admin, PDO::PARAM_BOOL);
             $smtp->bindParam(":user_id", $id, PDO::PARAM_INT);
             $smtp->bindParam(":listaID", $listaID, PDO::PARAM_INT);
 
@@ -557,7 +563,7 @@ Route::POST('/compartir', function (Request $request) {
 
             // Bindeo de parametros
 
-            $smtp->bindParam(":admin", $admin, PDO::PARAM_INT);
+            $smtp->bindParam(":admin", $admin, PDO::PARAM_BOOL);
             $smtp->bindParam(":user_id", $id, PDO::PARAM_INT);
             $smtp->bindParam(":listaID", $listaID, PDO::PARAM_INT);
 
@@ -607,6 +613,15 @@ Route::POST('/modificar_lista', function (Request $request) {
     $affected = DB::table('listas')
               ->where('id','=', $request->proyectoid)
               ->update(['nombre' => $request->nombre, 'descripcion' => $request->descripcion]);
+});
+
+Route::POST('/probas', function (Request $request) {
+    $objeto = new stdClass();
+    $query = DB::table('usuario_proyectos')
+              ->select('admin')
+              ->get();
+    $objeto->resultados = $query;
+    echo json_encode($objeto);
 });
 
 /* ---------------------------------------------------------------------------------------------- */

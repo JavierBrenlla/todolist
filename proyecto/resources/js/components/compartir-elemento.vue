@@ -24,7 +24,7 @@
             </v-row>
             <v-row>
               <v-col cols="12" sm="6">
-                <input type="checkbox" name="checkbox" id="admin"> <label for="checkbox">Hacer admin</label>
+                <input type="checkbox" name="checkbox" id="admin"> <label for="checkbox">Permitir editar</label>
               </v-col>
             </v-row>
           </v-container>
