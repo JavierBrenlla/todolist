@@ -500,9 +500,10 @@ Route::POST('/borrar_tarea', function (Request $request) {
 Route::POST('/obtener_emails', function (Request $request) {
 
     $objeto = new stdClass();
+    $usermail = auth()->user()->email;
 
     $emails = DB::table('users')
-        ->select('email')
+        ->select('email')->where('email','!=',$usermail)
         ->get();
 
     $objeto->resultados = $emails;
@@ -582,6 +583,12 @@ Route::POST('/borrar_elemento', function (Request $request) {
         if ($request->opcion == 1) {
             DB::table('listas')->where('id', '=', $id)->delete();
         }else{
+            $ids = DB::table('proyectos_listas')->select('lista_id')->where('proyecto_id','=',$id)->get();
+            if (count($ids)!=0) {
+                for($i=0;$i<count($ids);$i++){
+                    DB::table('listas')->where('id','=',$ids[$i]->lista_id)->delete();
+                }
+            }
             DB::table('proyectos')->where('id', '=', $id)->delete();
         }
     }

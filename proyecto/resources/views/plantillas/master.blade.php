@@ -24,15 +24,17 @@
 <body>
     <nav
         class="navbar navbar-expand-sm navbar-expand-lg navbar-expand-md navbar-expand-xl navbar-dark bg-dark flex-row container text-left">
-        <a href="/listar_proyectos/{{ auth()->user()->id }}" class="btn btn-primary text-white m-2">Proyectos</a>
-        <a href="/listar_listas" class="btn btn-primary text-white m-2">Listas</a>
+        <a href="/listar_proyectos/{{ auth()->user()->id }}" class="btn btn-primary text-white m-2 botones">Proyectos</a>
+        <a href="/listar_listas" class="btn btn-primary text-white m-2 botones">Listas</a>
         @auth
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-nome">
                 @csrf
             </form>
             <a class="nav-link" aria-current="page" href="{{ route('logout') }}"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><button
-                    class="btn btn-primary m-2">Salir</button></a>
+                    class="btn btn-primary m-2 btn-salir"><span class="material-icons-outlined salir">
+                        power_settings_new
+                        </span></button></a>
 
         @else
             <a class="btn btn-primary text-white m-2" aria-current="page" href="{{ route('login') }}">Login</a>
