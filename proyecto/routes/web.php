@@ -631,6 +631,116 @@ Route::POST('/probas', function (Request $request) {
     echo json_encode($objeto);
 });
 
+Route::POST('/buscar_elemento', function (Request $request) {
+    define('DB_SERVIDOR', 'localhost');
+    define('DB_PUERTO', '3306');
+    define('DB_BASEDATOS', 'todolist');
+    define('DB_USUARIO', 'todolist');
+    define('DB_PASSWORD', 'abc123.');
+
+    try {
+        $cadenaConexion = "mysql:host=" . DB_SERVIDOR . ";port=" . DB_PUERTO . ";dbname=" . DB_BASEDATOS . ";charset=utf8";
+        $pdo = new PDO($cadenaConexion, DB_USUARIO, DB_PASSWORD);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die("Error conectando a servidor de base de datos: " . $e->getMessage());
+    }
+
+    $objeto = new stdClass();
+    $nombre = '%'.$request->string.'%';
+
+    /* $consulta = DB::table('usuario_proyectos')->join("users", "users.id", "=", "usuario_proyectos.user_id")->join("proyectos","proyectos.id", "usuario_proyectos.proyecto_id")->where("proyectos.nombre","LIKE", '%'.$nombre.'%')->get();
+    $objeto->resultados = $consulta; */
+
+    $smtp = $pdo->prepare("SELECT * FROM `usuario_proyectos` INNER join users on usuario_proyectos.user_id = users.id INNER join proyectos on proyectos.id = usuario_proyectos.proyecto_id where proyectos.nombre LIKE :patron");
+
+            // Bindeo de parametros
+
+            $smtp->bindParam(":patron", $nombre);
+
+            // Ejecutar consulta
+
+            $smtp->execute();
+            $objeto->resultados = $smtp->fetchAll();
+            // $objeto->resultados = $nombre;
+    echo json_encode($objeto);
+});
+
+Route::POST('/buscar_listaProyecto', function (Request $request) {
+    define('DB_SERVIDOR', 'localhost');
+    define('DB_PUERTO', '3306');
+    define('DB_BASEDATOS', 'todolist');
+    define('DB_USUARIO', 'todolist');
+    define('DB_PASSWORD', 'abc123.');
+
+    try {
+        $cadenaConexion = "mysql:host=" . DB_SERVIDOR . ";port=" . DB_PUERTO . ";dbname=" . DB_BASEDATOS . ";charset=utf8";
+        $pdo = new PDO($cadenaConexion, DB_USUARIO, DB_PASSWORD);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die("Error conectando a servidor de base de datos: " . $e->getMessage());
+    }
+
+    $objeto = new stdClass();
+    $nombre = '%'.$request->string.'%';
+
+    /* $consulta = DB::table('usuario_proyectos')->join("users", "users.id", "=", "usuario_proyectos.user_id")->join("proyectos","proyectos.id", "usuario_proyectos.proyecto_id")->where("proyectos.nombre","LIKE", '%'.$nombre.'%')->get();
+    $objeto->resultados = $consulta; */
+
+    $smtp = $pdo->prepare("SELECT * FROM `proyectos_listas` INNER join listas on proyectos_listas.lista_id = listas.id where listas.nombre like :patron");
+
+            // Bindeo de parametros
+
+            $smtp->bindParam(":patron", $nombre);
+
+            // Ejecutar consulta
+
+            $smtp->execute();
+            $objeto->resultados = $smtp->fetchAll();
+            // $objeto->resultados = $nombre;
+    echo json_encode($objeto);
+});
+
+Route::POST('/buscar_lista', function (Request $request) {
+    define('DB_SERVIDOR', 'localhost');
+    define('DB_PUERTO', '3306');
+    define('DB_BASEDATOS', 'todolist');
+    define('DB_USUARIO', 'todolist');
+    define('DB_PASSWORD', 'abc123.');
+
+    try {
+        $cadenaConexion = "mysql:host=" . DB_SERVIDOR . ";port=" . DB_PUERTO . ";dbname=" . DB_BASEDATOS . ";charset=utf8";
+        $pdo = new PDO($cadenaConexion, DB_USUARIO, DB_PASSWORD);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die("Error conectando a servidor de base de datos: " . $e->getMessage());
+    }
+
+    $objeto = new stdClass();
+    $id = Auth::id();
+    $nombre = '%'.$request->string.'%';
+
+    /* $consulta = DB::table('usuario_proyectos')->join("users", "users.id", "=", "usuario_proyectos.user_id")->join("proyectos","proyectos.id", "usuario_proyectos.proyecto_id")->where("proyectos.nombre","LIKE", '%'.$nombre.'%')->get();
+    $objeto->resultados = $consulta; */
+
+    $smtp = $pdo->prepare("SELECT usuario_listas.admin, usuario_listas.user_id,proyectos_listas.proyecto_id,listas.nombre,listas.descripcion, usuario_listas.lista_id FROM `usuario_listas` left join listas on usuario_listas.lista_id = listas.id left join proyectos_listas on listas.id = proyectos_listas.lista_id where usuario_listas.user_id = :id and listas.nombre like :patron");
+
+            // Bindeo de parametros
+
+            $smtp->bindParam(":patron", $nombre);
+            $smtp->bindParam(":id", $id);
+
+            // Ejecutar consulta
+
+            $smtp->execute();
+            $objeto->resultados = $smtp->fetchAll();
+            // $objeto->resultados = $nombre;
+    echo json_encode($objeto);
+});
+
 /* ---------------------------------------------------------------------------------------------- */
 
 // Rutas del modulo de autenticacion

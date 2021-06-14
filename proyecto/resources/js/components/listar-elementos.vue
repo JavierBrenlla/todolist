@@ -1,5 +1,6 @@
 <template>
   <body>
+    <buscar-componente opcion="0"></buscar-componente>
     <h3 class="titulo">Tus proyectos</h3>
     <div v-for="(proyecto, i) in proyectos" :key="i">
       <a :href="enlace(proyecto.proyecto_id)">
@@ -23,7 +24,8 @@ import EditarElemento from './editar-elemento.vue';
 export default {
   data: () => ({
     proyectos: [],
-    EditarElemento
+    EditarElemento,
+    buscar: [],
   }),
   methods: {
     listarProyectos: function () {
@@ -54,35 +56,35 @@ export default {
       return "/proyecto/" + $id;
     },
 
-   /*  proba: function(){
-      let laravelToken = document
+   buscarProyecto: function(string){
+    //  console.log(string);
+     let laravelToken = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
-      let init = {
+
+      let init2 = {
         method: "POST",
         headers: {
-          "Content-type": "application/json",
+          "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
           "X-CSRF-TOKEN": laravelToken,
         },
+        body: `string=${string}&nombre=${this.nombre}&descripcion=${this.descripcion}`,
       };
 
-      fetch("/probas", init)
+      fetch("/buscar_elemento", init2)
         .then((res) => res.json())
         .then((res) => {
-          console.log(res.resultados);
-          for (let index = 0; index < res.resultados.length; index++) {
-            this.proyectos[index].usuarioProyectosAdmin = res.resultados[index];
-          }
+          this.proyectos = res.resultados;
+          // console.log(res.resultados);
           console.log(this.proyectos);
         })
         .catch(function (error) {
           console.log(error);
         });
-    } */
+   }
   },
   created() {
     this.listarProyectos();
-    // this.proba();
   },
 };
 </script>

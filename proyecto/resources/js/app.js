@@ -35,6 +35,7 @@ Vue.component('completar-tarea', require('./components/completar-tarea.vue').def
 Vue.component('eliminar-tarea', require('./components/eliminar-tarea.vue').default);
 Vue.component('editar-elemento', require('./components/editar-elemento.vue').default);
 Vue.component('listas-proyectos', require('./components/listas-proyectos.vue').default);
+Vue.component('buscar-componente', require('./components/buscar-componente.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

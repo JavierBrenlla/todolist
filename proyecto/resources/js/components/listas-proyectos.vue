@@ -1,5 +1,6 @@
 <template>
   <body>
+    <buscar-componente opcion="1"></buscar-componente>
     <div v-for="(proyecto, i) in proyectos" :key="i">
       <a :href="enlace(proyecto.lista_id)">
         <div class="proyectos">
@@ -54,6 +55,33 @@ export default {
     enlace: function ($id) {
       return "/lista/" + $id;
     },
+
+    buscarProyecto: function(string){
+    //  console.log(string);
+     let laravelToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+
+      let init2 = {
+        method: "POST",
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+          "X-CSRF-TOKEN": laravelToken,
+        },
+        body: `string=${string}&nombre=${this.nombre}&descripcion=${this.descripcion}`,
+      };
+
+      fetch("/buscar_listaProyecto", init2)
+        .then((res) => res.json())
+        .then((res) => {
+          this.proyectos = res.resultados;
+          // console.log(res.resultados);
+          console.log(this.proyectos);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+   }
   },
   created() {
     this.listarProyectos();
