@@ -283,6 +283,8 @@ Route::post('/crear_listaProyecto', function (Request $request) {
 
     // Preparar consulta
 
+    if($request->input('titulo') != ''){
+
     $smtp = $pdo->prepare("insert into listas (nombre, descripcion, fecha_creacion) values (:titulo,:descripcion,:fecha_creacion)");
 
     // Bindeo de parametros
@@ -333,6 +335,8 @@ Route::post('/crear_listaProyecto', function (Request $request) {
     // ejecutar consulta
 
     $smtp->execute();
+
+    }
 });
 
 Route::get('/lista/{id}', function (Request $request) {
@@ -359,40 +363,6 @@ Route::get('/listar_proyectos/{userID}', function (Request $request) {
 
     return view('plantillas.paginaprincipal');
 });
-
-/* Route::get('/listar_listas', function (Request $request) {
-
-    define('DB_SERVIDOR', 'localhost');
-    define('DB_PUERTO', '3306');
-    define('DB_BASEDATOS', 'todolist');
-    define('DB_USUARIO', 'todolist');
-    define('DB_PASSWORD', 'abc123.');
-
-    try {
-        $cadenaConexion = "mysql:host=" . DB_SERVIDOR . ";port=" . DB_PUERTO . ";dbname=" . DB_BASEDATOS . ";charset=utf8";
-        $pdo = new PDO($cadenaConexion, DB_USUARIO, DB_PASSWORD);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        die("Error conectando a servidor de base de datos: " . $e->getMessage());
-    }
-
-    $id = Auth::id();
-
-    $smtp = $pdo->prepare("SELECT usuario_listas.admin, usuario_listas.user_id,proyectos_listas.proyecto_id,listas.nombre,listas.descripcion, usuario_listas.lista_id FROM `usuario_listas` left join listas on usuario_listas.lista_id = listas.id left join proyectos_listas on listas.id = proyectos_listas.lista_id where usuario_listas.user_id = :userID");
-
-    // Bindeo de parametros
-
-    $smtp->bindParam(":userID", $id);
-
-    // Ejecutar consulta
-
-    $smtp->execute();
-
-    $listas = $smtp->fetchAll();
-
-    return view('plantillas.listarListas')->with('listas', $listas);
-}); */
 
 Route::get('/listar_listas', function (Request $request) {
 
@@ -458,6 +428,8 @@ Route::post('/crear_tarea', function (Request $request) {
     $descripcion = strip_tags($request->descripcion);
     $fecha = date('Y-m-d G:i:s');
 
+    if($request->titulo != '') {
+
     $smtp = $pdo->prepare("INSERT INTO `tareas`(`nombre`, `fecha_creacion`, `lista_id`) values (:nombre, :fecha_creacion, :listaID)");
 
     // Bindeo de parametros
@@ -469,6 +441,7 @@ Route::post('/crear_tarea', function (Request $request) {
     // Ejecutar consulta
 
     $smtp->execute();
+    }
 });
 
 Route::POST('/cantidad_tareas', function (Request $request) {
@@ -611,15 +584,19 @@ Route::POST('/editar_lista', function (Request $request) {
 });
 
 Route::POST('/modificar_proyecto', function (Request $request) {
+    if($request->nombre != '' and $request->descripcion != ''){
     $affected = DB::table('proyectos')
               ->where('id','=', $request->proyectoid)
               ->update(['nombre' => $request->nombre, 'descripcion' => $request->descripcion]);
+    }
 });
 
 Route::POST('/modificar_lista', function (Request $request) {
+    if($request->nombre != '' and $request->descripcion != ''){
     $affected = DB::table('listas')
               ->where('id','=', $request->proyectoid)
               ->update(['nombre' => $request->nombre, 'descripcion' => $request->descripcion]);
+    }
 });
 
 Route::POST('/probas', function (Request $request) {

@@ -17,7 +17,7 @@
       </template>
       <v-card>
         <v-card-title>
-          <span class="headline">Editar proyecto</span>
+          <span class="headline">Editar</span>
         </v-card-title>
         <v-card-text>
           <v-container>
