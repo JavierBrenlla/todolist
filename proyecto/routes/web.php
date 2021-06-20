@@ -60,9 +60,9 @@ Route::post('/crear_proyecto', function (Request $request) {
 
     // Variables (fundamentales para pdo, sino no deja bindear parametros)
 
-    $titulo = $request->input('titulo');
+    $titulo = strip_tags($request->input('titulo'));
     $fecha = date('Y-m-d G:i:s');
-    $descripcion = $request->input('descripcion');
+    $descripcion = strip_tags($request->input('descripcion'));
 
     // Insercion a la base de datos
 
@@ -143,9 +143,9 @@ Route::post('/crear_lista', function (Request $request) {
 
     // Variables (fundamentales para pdo, sino no deja bindear parametros)
 
-    $titulo = $request->input('titulo');
+    $titulo = strip_tags($request->input('titulo'));
     $fecha = date('Y-m-d G:i:s');
-    $descripcion = $request->input('descripcion');
+    $descripcion = strip_tags($request->input('descripcion'));
     $recursiva = 0;
 
     // Insercion a la base de datos
@@ -240,7 +240,7 @@ Route::get('/proyecto/{id}', function (Request $request) {
 
 Route::post('/obtener_listas_proyetos', function (Request $request) {
 
-    $id = $request->id;
+    $id = strip_tags($request->id);
 
     $objeto = new stdClass();
 
@@ -275,9 +275,9 @@ Route::post('/crear_listaProyecto', function (Request $request) {
         die("Error conectando a servidor de base de datos: " . $e->getMessage());
     }
 
-    $titulo = $request->input('titulo');
+    $titulo = strip_tags($request->input('titulo'));
     $fecha = date('Y-m-d G:i:s');
-    $descripcion = $request->input('descripcion');
+    $descripcion = strip_tags($request->input('descripcion'));
 
     /* Consulta crear proyecto */
 
@@ -295,8 +295,8 @@ Route::post('/crear_listaProyecto', function (Request $request) {
 
     $smtp->execute();
 
-    $proyectoID = $request->input('proyectoID');
-    $userID = $request->input('userID');
+    $proyectoID = strip_tags($request->input('proyectoID'));
+    $userID = strip_tags($request->input('userID'));
     $listaID = DB::table('listas')->latest('id')->first()->id;
 
 
@@ -346,7 +346,7 @@ Route::get('/lista/{id}', function (Request $request) {
 Route::post('/obtener_tareas', function (Request $request) {
 
     $objeto = new stdClass();
-    $id = $request->listaid;
+    $id = strip_tags($request->listaid);
 
     $tareas = DB::table('tareas')->where("lista_id", "=", $id)->get();
 
@@ -453,9 +453,9 @@ Route::post('/crear_tarea', function (Request $request) {
         die("Error conectando a servidor de base de datos: " . $e->getMessage());
     }
 
-    $listaID = $request->listaID;
-    $nombre = $request->titulo;
-    $descripcion = $request->descripcion;
+    $listaID = strip_tags($request->listaID);
+    $nombre = strip_tags($request->titulo);
+    $descripcion = strip_tags($request->descripcion);
     $fecha = date('Y-m-d G:i:s');
 
     $smtp = $pdo->prepare("INSERT INTO `tareas`(`nombre`, `fecha_creacion`, `lista_id`) values (:nombre, :fecha_creacion, :listaID)");
@@ -483,7 +483,7 @@ Route::POST('/cantidad_tareas', function (Request $request) {
 
 Route::POST('/completar_tarea', function (Request $request) {
 
-    $id = $request->tareaid;
+    $id = strip_tags($request->tareaid);
 
     $affected = DB::table('tareas')
         ->where('id', '=', $id)
@@ -492,7 +492,7 @@ Route::POST('/completar_tarea', function (Request $request) {
 
 Route::POST('/borrar_tarea', function (Request $request) {
 
-    $id = $request->tareaid;
+    $id = strip_tags($request->tareaid);
 
     DB::table('tareas')->where('id', '=', $id)->delete();
 });
@@ -532,13 +532,13 @@ Route::POST('/compartir', function (Request $request) {
 
 
         if ($request->opcion == 1) {
-            $email = $request->email;
+            $email = strip_tags($request->email);
             $smtp = $pdo->prepare("SELECT id FROM `users` where email = :email");
             $smtp->bindParam(":email", $email);
             $smtp->execute();
             $id = $smtp->fetch()['id'];
-            $listaID = $request->listaID;
-            $admin = $request->admin;
+            $listaID = strip_tags($request->listaID);
+            $admin = strip_tags($request->admin);
 
             $smtp = $pdo->prepare("INSERT INTO `usuario_listas`(`admin`, `user_id`, `lista_id`) values (:admin, :user_id, :listaID)");
 
@@ -552,13 +552,13 @@ Route::POST('/compartir', function (Request $request) {
 
             $smtp->execute();
         } else {
-            $email = $request->email;
+            $email = strip_tags($request->email);
             $smtp = $pdo->prepare("SELECT id FROM `users` where email = :email");
             $smtp->bindParam(":email", $email);
             $smtp->execute();
             $id = $smtp->fetch()['id'];
-            $listaID = $request->listaID;
-            $admin = $request->admin;
+            $listaID = strip_tags($request->listaID);
+            $admin = strip_tags($request->admin);
 
             $smtp = $pdo->prepare("INSERT INTO `usuario_proyectos`(`admin`, `user_id`, `proyecto_id`) values (:admin, :user_id, :listaID)");
 
@@ -578,7 +578,7 @@ Route::POST('/compartir', function (Request $request) {
 Route::POST('/borrar_elemento', function (Request $request) {
 
     if ($request->opcion == 1 or $request->opcion == 0) {
-        $id = $request->id;
+        $id = strip_tags($request->id);
 
         if ($request->opcion == 1) {
             DB::table('listas')->where('id', '=', $id)->delete();
@@ -596,7 +596,7 @@ Route::POST('/borrar_elemento', function (Request $request) {
 
 Route::POST('/editar_proyecto', function (Request $request) {
     $objeto = new stdClass();
-    $id = $request->proyectoid;
+    $id = strip_tags($request->proyectoid);
     $query = DB::table('proyectos')->select('nombre', 'descripcion')->where('id','=', $id)->get();
     $objeto->resultados = $query;
     echo json_encode($objeto);
@@ -604,7 +604,7 @@ Route::POST('/editar_proyecto', function (Request $request) {
 
 Route::POST('/editar_lista', function (Request $request) {
     $objeto = new stdClass();
-    $id = $request->proyectoid;
+    $id = strip_tags($request->proyectoid);
     $query = DB::table('listas')->select('nombre', 'descripcion')->where('id','=', $id)->get();
     $objeto->resultados = $query;
     echo json_encode($objeto);
@@ -648,7 +648,7 @@ Route::POST('/buscar_elemento', function (Request $request) {
     }
 
     $objeto = new stdClass();
-    $nombre = '%'.$request->string.'%';
+    $nombre = '%'.strip_tags($request->string).'%';
 
     /* $consulta = DB::table('usuario_proyectos')->join("users", "users.id", "=", "usuario_proyectos.user_id")->join("proyectos","proyectos.id", "usuario_proyectos.proyecto_id")->where("proyectos.nombre","LIKE", '%'.$nombre.'%')->get();
     $objeto->resultados = $consulta; */
@@ -684,7 +684,7 @@ Route::POST('/buscar_listaProyecto', function (Request $request) {
     }
 
     $objeto = new stdClass();
-    $nombre = '%'.$request->string.'%';
+    $nombre = '%'.strip_tags($request->string).'%';
 
     /* $consulta = DB::table('usuario_proyectos')->join("users", "users.id", "=", "usuario_proyectos.user_id")->join("proyectos","proyectos.id", "usuario_proyectos.proyecto_id")->where("proyectos.nombre","LIKE", '%'.$nombre.'%')->get();
     $objeto->resultados = $consulta; */
@@ -721,7 +721,7 @@ Route::POST('/buscar_lista', function (Request $request) {
 
     $objeto = new stdClass();
     $id = Auth::id();
-    $nombre = '%'.$request->string.'%';
+    $nombre = '%'.strip_tags($request->string).'%';
 
     /* $consulta = DB::table('usuario_proyectos')->join("users", "users.id", "=", "usuario_proyectos.user_id")->join("proyectos","proyectos.id", "usuario_proyectos.proyecto_id")->where("proyectos.nombre","LIKE", '%'.$nombre.'%')->get();
     $objeto->resultados = $consulta; */
@@ -745,7 +745,7 @@ Route::POST('/obtener_admin_proyecto', function (Request $request) {
 
     $objeto = new stdClass();
     $user_id = Auth::id();
-    $proyecto_id = $request->id;
+    $proyecto_id = strip_tags($request->id);
 
     $consulta = DB::table('usuario_proyectos')->select('admin')->where("proyecto_id","=", $proyecto_id)->where('user_id','=',$user_id)->get();
     $objeto->resultados = $consulta;
