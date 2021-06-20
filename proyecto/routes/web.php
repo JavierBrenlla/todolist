@@ -741,6 +741,19 @@ Route::POST('/buscar_lista', function (Request $request) {
     echo json_encode($objeto);
 });
 
+Route::POST('/obtener_admin_proyecto', function (Request $request) {
+
+    $objeto = new stdClass();
+    $user_id = Auth::id();
+    $proyecto_id = $request->id;
+
+    $consulta = DB::table('usuario_proyectos')->select('admin')->where("proyecto_id","=", $proyecto_id)->where('user_id','=',$user_id)->get();
+    $objeto->resultados = $consulta;
+
+            $objeto->resultados = $consulta;
+    echo json_encode($objeto);
+});
+
 /* ---------------------------------------------------------------------------------------------- */
 
 // Rutas del modulo de autenticacion

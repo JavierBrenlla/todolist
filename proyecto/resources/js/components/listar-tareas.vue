@@ -1,6 +1,6 @@
 <template>
   <body>
-    <table class="table table-striped table-dark">
+    <table class="table table-striped table-dark tabla-tareas">
       <tr>
         <th>Tarea</th>
         <th>Acciones</th>

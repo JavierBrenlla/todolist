@@ -14,10 +14,10 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="12" md="12">
-                <v-text-field label="Nombre" required id="nombre" v-model="nombre"></v-text-field>
+                <v-text-field label="Nombre*" required id="nombre" v-model="nombre"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-textarea name="descripcion" label="Descripcion" id="descripcion" v-model="descripcion"></v-textarea>
+                <v-textarea name="descripcion" label="Descripcion*" required id="descripcion" v-model="descripcion"></v-textarea>
               </v-col>
             </v-row>
           </v-container>

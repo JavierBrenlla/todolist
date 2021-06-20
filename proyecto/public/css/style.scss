@@ -15,7 +15,7 @@
 }
 
 div.proyectos {
-    margin-top: 2%;
+    margin-top: 4%;
     margin-right: 50%;
 }
 
@@ -25,7 +25,36 @@ div.proyectos {
 }
 
 .algo {
-    width: 80% !important;
+    width: 75% !important;
+}
+
+@media screen and (max-width:767px) {
+    .algo {
+        width: 60% !important;
+    }
+
+    div.proyectos {
+        margin-top: 6% !important;
+    }
+
+    .tabla-tareas {
+        margin-top: 5% !important;
+    }
+}
+
+@media screen and (max-width:500px) {
+    div.proyectos {
+        margin-top: 10% !important;
+    }
+
+    button.v-btn--is-elevated {
+        margin-right: 7% !important;
+    }
+
+    .buscador {
+        margin-top: -7% !important;
+        margin-left: 10%;
+    }
 }
 
 a {
@@ -104,4 +133,22 @@ a:active {
         border-color: white;
         color: black !important;
     }
+}
+
+.buscador {
+    width: 40%;
+    margin-top: -3% !important;
+    margin-left: 15%;
+}
+
+.tabla-tareas {
+    margin-top: 3%;
+}
+
+button.v-btn--is-elevated {
+    margin-right: 12% !important;
+}
+
+.ocultar-elemento {
+    visibility: hidden !important;
 }

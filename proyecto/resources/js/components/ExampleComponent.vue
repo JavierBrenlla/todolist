@@ -47,6 +47,7 @@
                       <v-textarea
                       v-model="descripcion"
                         :id="item.nombre"
+                        required
                         name="descripcion"
                         label="Descripcion"
                       ></v-textarea>

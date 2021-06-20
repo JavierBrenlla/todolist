@@ -5,6 +5,7 @@
       hide-details="auto"
       v-model="nombre"
       @keyup="buscarElemento()"
+      class="buscador"
     ></v-text-field>
   </div>
 </template>

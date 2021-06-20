@@ -3,7 +3,7 @@
 @section('titulo', Auth::user()->name)
 
 @section('central')
-    <crear-lista listaid="{{ $id }}" userid="{{ auth()->user()->id }}"></crear-lista>
+    <crear-lista listaid="{{ $id }}" userid="{{ auth()->user()->id }}" id="btn-lista"></crear-lista>
     {{-- @for ($i = 0; $i < count($datos); $i++)
         <a href="/lista/{{ $datos[$i]->lista_id }}">
             <div class="lista proyectos">
